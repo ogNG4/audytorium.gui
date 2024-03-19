@@ -6,7 +6,7 @@ import { ChakraProps, VStack } from '@chakra-ui/react';
 
 interface SimpleFormProps<T extends FieldValues> {
     onSubmit: SubmitHandler<T>;
-    validationSchema: Yup.AnyObjectSchema;
+    validationSchema?: Yup.AnyObjectSchema;
 }
 
 function SimpleForm<T extends FieldValues>({
@@ -18,7 +18,7 @@ function SimpleForm<T extends FieldValues>({
 }: PropsWithChildren<UseFormProps<T> & SimpleFormProps<T> & ChakraProps>) {
     const methods = useForm({
         defaultValues,
-        resolver: yupResolver(validationSchema),
+        resolver: validationSchema ? yupResolver(validationSchema) : undefined,
     });
     const { handleSubmit, reset } = methods;
 

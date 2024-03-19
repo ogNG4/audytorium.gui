@@ -3,6 +3,14 @@ const activeLabelStyles = {
     transform: 'scale(0.85) translateY(-24px)',
 };
 export const theme = extendTheme({
+    styles:{
+        global: {
+            body: {
+                bg: 'gray.800',
+                color: 'white'
+            }
+        }
+    },
     components: {
         Form: {
             variants: {
@@ -38,6 +46,7 @@ export const theme = extendTheme({
             baseStyle: {
                 color: 'white'
             }
-        }
+        },
+    
     },
 });

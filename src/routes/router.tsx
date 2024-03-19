@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteObject, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 export const BaseLayout = React.lazy(() => import('@/pages/layouts/BaseLayout'));
-export const HomePage = React.lazy(() => import('@/pages/Page'));
+export const HomePage = React.lazy(() => import('@/pages/Chatbot/Page'));
 
 const routeList: RouteObject[] = [
     {
