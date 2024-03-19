@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 function BaseLayout() {
     return (
-        <VStack bg={'gray.800'} height="100vh" flex={1}>
+        <VStack height="100vh" p={8}>
             <Outlet />
         </VStack>
     );
