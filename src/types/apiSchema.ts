@@ -5,9 +5,6 @@
 
 
 export interface paths {
-  "/": {
-    get: operations["AppController_getHello"];
-  };
   "/user": {
     get: operations["UserController_findAll"];
   };
@@ -38,7 +35,6 @@ export interface components {
       password: string;
       firstName: string;
       lastName: string;
-      username: string;
     };
   };
   responses: never;
@@ -54,13 +50,6 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  AppController_getHello: {
-    responses: {
-      200: {
-        content: never;
-      };
-    };
-  };
   UserController_findAll: {
     responses: {
       200: {

@@ -9,7 +9,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prepare": "husky",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "generate": "openapi-typescript http://localhost:3000/api-json --output ./src/types/apiSchema.ts"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
