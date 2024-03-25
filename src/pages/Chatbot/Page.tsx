@@ -36,7 +36,7 @@ function Page() {
     };
 
     return (
-        <Stack height="100vh" w="60%" maxW="5xl" justifyContent="space-between" spacing={10}>
+        <Stack height="100vh"  justifyContent="space-between" spacing={10}>
             <VStack spacing={4} mb={8}>
                 <img src={Logo} alt="logo" width={280} />
 

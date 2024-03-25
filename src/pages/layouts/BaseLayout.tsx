@@ -1,11 +1,15 @@
-import { VStack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
 
 function BaseLayout() {
     return (
-        <VStack height="100vh" p={8}>
-            <Outlet />
-        </VStack>
+        <Stack height="100vh" direction={'row'} w={'100%'}>
+            <Sidebar />
+            <Stack flex={1} py={8} px={12}>
+                <Outlet />
+            </Stack>
+        </Stack>
     );
 }
 
