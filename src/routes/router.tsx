@@ -10,7 +10,7 @@ async function loginLoader() {
 
 async function protectedLoader() {
     const token = auth.getDecodedToken();
-    if (!token) return redirect('/auth/login');
+    if (!token) return redirect('/login');
     return token;
 }
 
@@ -35,7 +35,9 @@ const routeList: RouteObject[] = [
     {
         id: 'root',
         path: '/',
+        ...routeProps,
         element: <BaseLayout />,
+
         children: [{ ...routeProps, path: '/', element: <ChatbotPage /> }],
     },
     {
@@ -46,6 +48,13 @@ const routeList: RouteObject[] = [
             { ...authRouteProps, path: 'login', element: <LoginPage /> },
             { ...authRouteProps, path: 'create-account', element: <CreateAccountPage /> },
         ],
+    },
+    {
+        path: '/logout',
+        loader() {
+            auth.removeToken();
+            return redirect('/login');
+        },
     },
 ];
 const router = createBrowserRouter(routeList);
