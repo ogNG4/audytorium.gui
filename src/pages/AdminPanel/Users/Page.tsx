@@ -7,7 +7,7 @@ import { Else, If, Then, When } from 'react-if';
 import RoleBadge from '@/components/Badge/RoleBadge';
 import { AppRoleName, Token } from '@/types/auth';
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { Navigate, Outlet, useLoaderData, useNavigate } from 'react-router-dom';
+import { Outlet, useLoaderData, useNavigate } from 'react-router-dom';
 import { isNewParam } from '@/constants/common';
 import ConfirmationModal from '@/components/Modal/ConfirmationModal';
 import { useCallback, useState } from 'react';
@@ -71,7 +71,7 @@ function Page() {
                             <Tag colorScheme="green">Aktywny</Tag>
                         </Then>
                         <Else>
-                            <Button colorScheme="red">Nieaktywny</Button>
+                            <Tag colorScheme="red">Nieaktywny</Tag>
                         </Else>
                     </If>
                 );
