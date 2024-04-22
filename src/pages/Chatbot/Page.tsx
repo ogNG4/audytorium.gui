@@ -25,18 +25,18 @@ function Page() {
         const randomMessage = sample(fakeMessages);
         setIsBotTyping(true);
         setTimeout(() => {
-            setMessages((prevMessages) => [...(prevMessages || []), { message: randomMessage, isBot: true }]);
+            setMessages((prevMessages) => [...(prevMessages || []), { message: randomMessage || '', isBot: true }]);
             setIsBotTyping(false);
         }, 300);
     };
 
     const handleSubmit = ({ message }: FormInput) => {
-        setMessages((prevMessages) => [...(prevMessages || []), { message, isBot: false }]);
+        setMessages((prevMessages) => [...(prevMessages || []), { message: message || '', isBot: false }]);
         generateBotResponse();
     };
 
     return (
-        <Stack height="100vh"  justifyContent="space-between" spacing={10}>
+        <Stack justifyContent="space-between" spacing={10} h={'80vh'} >
             <VStack spacing={4} mb={8}>
                 <img src={Logo} alt="logo" width={280} />
 

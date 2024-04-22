@@ -6,16 +6,27 @@
 
 export interface paths {
   "/user": {
-    get: operations["UserController_findAll"];
+    put: operations["UserController_updateUser"];
+    post: operations["UserController_createUser"];
+  };
+  "/user/{id}": {
+    get: operations["UserController_getUserById"];
+    delete: operations["UserController_deleteUser"];
+  };
+  "/user/all": {
+    get: operations["UserController_getAllUsers"];
   };
   "/auth/sign-in": {
     post: operations["AuthController_signIn"];
   };
-  "/auth/sign-up": {
-    post: operations["AuthController_signUp"];
+  "/auth/set-new-password": {
+    post: operations["AuthController_setNewPassword"];
   };
-  "/auth/sign-up/verify-account": {
-    post: operations["AuthController_verifyAccount"];
+  "/auth/reset-password": {
+    post: operations["AuthController_resetPassword"];
+  };
+  "/roles/all": {
+    get: operations["RoleController_getAllUsers"];
   };
 }
 
@@ -23,6 +34,38 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    CreateAccountInputDto: {
+      /** @example user@email.com */
+      email: string;
+      /** @example John */
+      firstName: string;
+      /** @example Doe */
+      lastName: string;
+      /** @example ADMIN */
+      role: string;
+    };
+    UpdateAccountInputDto: {
+      /** @example 123456 */
+      id: string;
+      /** @example user@email.com */
+      email: string;
+      /** @example John */
+      firstName: string;
+      /** @example Doe */
+      lastName: string;
+      /** @example ADMIN */
+      role: string;
+    };
+    UserDto: {
+      id: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+      roles: string[];
+      /** Format: date-time */
+      createdAt: string;
+      isActive: boolean;
+    };
     SigInputDto: {
       email: string;
       password: string;
@@ -30,11 +73,16 @@ export interface components {
     SignInDto: {
       accessToken: string;
     };
-    CreateAccountInputDto: {
-      email: string;
+    SetNewPasswordInputDto: {
+      userId: string;
+      token: string;
       password: string;
-      firstName: string;
-      lastName: string;
+    };
+    ResetPasswordInputDto: {
+      email: string;
+    };
+    RoleDto: {
+      name: string;
     };
   };
   responses: never;
@@ -50,10 +98,67 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  UserController_findAll: {
+  UserController_updateUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateAccountInputDto"];
+      };
+    };
     responses: {
+      /** @description Update user */
       200: {
         content: never;
+      };
+    };
+  };
+  UserController_createUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateAccountInputDto"];
+      };
+    };
+    responses: {
+      /** @description Create user */
+      201: {
+        content: never;
+      };
+    };
+  };
+  UserController_getUserById: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Get user by id */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserDto"];
+        };
+      };
+    };
+  };
+  UserController_deleteUser: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Delete user */
+      200: {
+        content: never;
+      };
+    };
+  };
+  UserController_getAllUsers: {
+    responses: {
+      /** @description Get all users */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserDto"][];
+        };
       };
     };
   };
@@ -72,30 +177,39 @@ export interface operations {
       };
     };
   };
-  AuthController_signUp: {
+  AuthController_setNewPassword: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["CreateAccountInputDto"];
+        "application/json": components["schemas"]["SetNewPasswordInputDto"];
       };
     };
     responses: {
-      /** @description Sign in */
+      /** @description Set new password */
       200: {
-        content: {
-          "application/json": components["schemas"]["SignInDto"];
-        };
+        content: never;
       };
     };
   };
-  AuthController_verifyAccount: {
+  AuthController_resetPassword: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["CreateAccountInputDto"];
+        "application/json": components["schemas"]["ResetPasswordInputDto"];
       };
     };
     responses: {
-      201: {
+      /** @description Reset password */
+      200: {
         content: never;
+      };
+    };
+  };
+  RoleController_getAllUsers: {
+    responses: {
+      /** @description Get all users */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RoleDto"][];
+        };
       };
     };
   };

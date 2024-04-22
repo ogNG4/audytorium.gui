@@ -1,60 +1,64 @@
 import LoadingButton from '@/components/Button/LoadingButton';
 import SimpleForm from '@/components/Form/SimpleForm';
 import TextInput from '@/components/Form/TextInput';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import { useCreateAccountMutation, useToast } from '@/hooks';
-import { IconButton, InputGroup, InputRightElement } from '@chakra-ui/react';
+import { useSetNewPasswordMutation, useToast, useToken } from '@/hooks';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useNavigate } from 'react-router-dom';
-
+import { IconButton, InputGroup, InputRightElement } from '@chakra-ui/react';
 interface FormInput {
-    email: string;
     password: string;
     repeatPassword: string;
-    firstName: string;
-    lastName: string;
 }
 
-function CreateAccountForm() {
+function NewPasswordForm() {
     const { t } = useTranslation();
-    const { mutate } = useCreateAccountMutation();
-    const navigate = useNavigate();
+    const { mutate, isPending } = useSetNewPasswordMutation();
     const { showError, showSuccess } = useToast();
+    const { token } = useToken();
     const [show, setShow] = useState(false);
+    const [searchParams] = useSearchParams();
+    const setPasswordToken = searchParams.get('token');
+    const userId = searchParams.get('accountId');
+    const navigate = useNavigate();
+
     const validationSchema = useMemo(() => {
         return yup.object().shape({
-            email: yup.string().required(t('Email jest wymagany')).email(t('Email jest niepoprawny')),
             password: yup.string().required(t('Hasło jest wymagane')),
             repeatPassword: yup
                 .string()
                 .required(t('Hasło jest wymagane'))
                 .oneOf([yup.ref('password')], t('Hasła muszą być takie same')),
-            firstName: yup.string().required(t('Imię jest wymagane')),
-            lastName: yup.string().required(t('Nazwisko jest wymagane')),
         });
     }, [t]);
 
-    const handleSubmit = ({ email, password, firstName, lastName }: FormInput) => {
+    const handleSubmit = ({ password }: FormInput) => {
+        if (!setPasswordToken || !userId) return;
         mutate(
-            { email, password, firstName, lastName },
+            { password, token: setPasswordToken, userId },
             {
                 onSuccess: () => {
-                    showSuccess('Account created succesful!');
+                    showSuccess('Hasło zostało zmienione pomyślnie!');
                     navigate('/login');
                 },
-                onError: () => showError('Invalid credentials'),
+                onError: (error) => showError(error, 'Coś poszło nie tak!'),
             }
         );
     };
 
     const defaultValues = useMemo(() => {
         return {
-            email: '',
             password: '',
+            repeatPassword: '',
         };
     }, []);
+
+    useEffect(() => {
+        if (token) navigate('/');
+        if (!setPasswordToken || !userId) throw new Error();
+    }, [token, navigate, setPasswordToken, userId]);
 
     const ToggleButton = () => {
         return (
@@ -75,9 +79,6 @@ function CreateAccountForm() {
             defaultValues={defaultValues}
             w={'xs'}
         >
-            <TextInput<FormInput> name="email" placeholder={t('Email')} />
-            <TextInput<FormInput> name="firstName" placeholder={t('Imię')} />
-            <TextInput<FormInput> name="lastName" placeholder={t('Nazwisko')} />
             <InputGroup>
                 <TextInput<FormInput> type={show ? 'text' : 'password'} name="password" placeholder={t('Hasło')} />
                 <InputRightElement>
@@ -90,11 +91,11 @@ function CreateAccountForm() {
                 placeholder={t('Powtórz hasło')}
             />
 
-            <LoadingButton w={'full'} type="submit">
-                {t('Utwórz konto')}
+            <LoadingButton w={'full'} type="submit" isLoading={isPending} isDisabled={!userId || !setPasswordToken}>
+                {t('Resetuj hasło')}
             </LoadingButton>
         </SimpleForm>
     );
 }
 
-export default CreateAccountForm;
+export default NewPasswordForm;

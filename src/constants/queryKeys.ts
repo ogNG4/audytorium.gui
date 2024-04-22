@@ -1,1 +1,5 @@
-export default {};
+export default {
+    users: 'users',
+    user: 'user',
+    roles: 'roles',
+};
