@@ -19,6 +19,7 @@ import {
     ModalHeader,
     ModalOverlay,
     Stack,
+    Text,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback, useEffect, useMemo } from 'react';
@@ -127,8 +128,12 @@ function Page() {
                     </When>
                     <ModalHeader>
                         <If condition={isNew}>
-                            <Then>Utwórz użytkownika</Then>
-                            <Else>Edytuj użytkownika</Else>
+                            <Then>
+                                <Text>Utwórz użytkownika</Text>
+                            </Then>
+                            <Else>
+                                <Text>Edytuj użytkownika</Text>
+                            </Else>
                         </If>
                     </ModalHeader>
                     <ModalCloseButton />
@@ -137,7 +142,7 @@ function Page() {
                             <TextInput<FormInput> isRequired={true} name="email" placeholder="Email" />
                             <TextInput<FormInput> isRequired={true} name="firstName" placeholder="Imię" />
                             <TextInput<FormInput> isRequired={true} name="lastName" placeholder="Nazwisko" />
-                            <SelectInput<FormInput> name="role">
+                            <SelectInput<FormInput> name="role" colorScheme="black">
                                 <option value="">Rola</option>
                                 {map(roles, (role) => (
                                     <option key={role.name} value={role.name}>

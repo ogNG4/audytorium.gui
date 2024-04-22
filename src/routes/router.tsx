@@ -72,16 +72,20 @@ const routeList: RouteObject[] = [
                 loader: () => rolesLoader([AppRoleName.SuperAdmin]),
                 element: <UsersPage />,
                 children: [
-                    {
-                        path: 'create/:userId/:edited',
-                        // loader: () => rolesLoader([AppRoleName.SuperAdmin]),
-                        element: <UserModal />,
-                    },
+                    // {
+                    //     path: ':userId',
+                    //     loader: () => rolesLoader([AppRoleName.SuperAdmin]),
+                    //     element: <UserModal />,
+                    // },
                 ],
+            },
+            {
+                path: 'users/:userId',
+                loader: () => rolesLoader([AppRoleName.SuperAdmin]),
+                element: <UserModal />,
             },
         ],
     },
-
     {
         path: '/logout',
         loader() {
@@ -90,7 +94,7 @@ const routeList: RouteObject[] = [
         },
     },
 ];
-const router = createBrowserRouter(routeList);
+export const router = createBrowserRouter(routeList);
 
 export const Routes: React.FC = () => {
     return <RouterProvider router={router} />;

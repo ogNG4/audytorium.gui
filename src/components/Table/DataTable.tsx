@@ -56,8 +56,6 @@ function DataTable<Data extends object>({ data, columns }: DataTableProps<Data>)
         },
     });
 
-    console.log(pagination);
-
     return (
         <TableContainer border="1px" borderColor="gray.200" rounded={'md'}>
             <Box overflowY={'scroll'} maxH={'70vh'}>
@@ -120,6 +118,9 @@ function DataTable<Data extends object>({ data, columns }: DataTableProps<Data>)
                                         Strona {table.getState().pagination.pageIndex + 1} z {table.getPageCount()}
                                     </Text>
                                 </When>
+                                <Text ml={2}>
+                                    Wyświetlono {table.getRowModel().rows.length} z {table.getRowCount()} rekordów
+                                </Text>
                             </HStack>
                             <Select
                                 justifySelf={'flex-end'}

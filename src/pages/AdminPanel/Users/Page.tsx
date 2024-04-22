@@ -32,7 +32,6 @@ function Page() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
     const client = useQueryClient();
-    console.log(user);
 
     const tableData: TableData[] =
         data?.map((user) => ({
@@ -56,7 +55,7 @@ function Page() {
             enableResizing: true,
         }),
         columnHelper.accessor('email', {
-            cell: (info) => info.getValue(),
+            cell: (info) => <Text>{info.getValue()}</Text>,
             header: 'Email',
         }),
         columnHelper.accessor('role', {
@@ -131,6 +130,7 @@ function Page() {
 
     return (
         <>
+            <Outlet />
             <ConfirmationModal
                 isOpen={isOpen}
                 onClose={onClose}
@@ -140,7 +140,6 @@ function Page() {
                 description="Tej operacji nie można cofnąć!"
                 confirmText="Usuń"
             />
-            <Outlet />
             <Stack w={'80%'}>
                 <If condition={isLoading}>
                     <Then>
@@ -151,12 +150,12 @@ function Page() {
                             <HStack justifyContent={'space-between'}>
                                 <Text as="b">Użytkownicy</Text>
                                 <Button
-                                    leftIcon={<AddIcon />}
+                                    leftIcon={<AddIcon color={'white'} />}
                                     variant="outlined"
                                     size="sm"
-                                    onClick={() => navigate(`create/0/${isNewParam}`)}
+                                    onClick={() => navigate(`${isNewParam}`)}
                                 >
-                                    Dodaj użytkownika
+                                    <Text>Dodaj użytkownika</Text>
                                 </Button>
                             </HStack>
                             {data && <DataTable columns={columns as ColumnDef<object, TableData>[]} data={tableData} />}
