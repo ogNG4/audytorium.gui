@@ -1,15 +1,18 @@
 import { extendTheme } from '@chakra-ui/react';
+
 const activeLabelStyles = {
     transform: 'scale(0.85) translateY(-24px)',
 };
 export const theme = extendTheme({
-    styles:{
+    initialColorMode: 'dark',
+    useSystemColorMode: false,
+    styles: {
         global: {
             body: {
                 bg: 'gray.800',
-                color: 'white'
-            }
-        }
+                color: 'white',
+            },
+        },
     },
     components: {
         Form: {
@@ -36,17 +39,16 @@ export const theme = extendTheme({
                             px: 1,
                             my: 2,
                             transformOrigin: 'left top',
-                            color: 'white'
+                            color: 'white',
                         },
                     },
                 },
             },
         },
-        Text:{
+        Text: {
             baseStyle: {
-                color: 'white'
-            }
+                color: 'white',
+            },
         },
-    
     },
 });

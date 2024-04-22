@@ -29,10 +29,10 @@ function LoginForm() {
             { email, password },
             {
                 onSuccess: (data) => {
-                    showSuccess('Login successful!');
+                    showSuccess('Zalogowano pomyślnie!');
                     setToken(data.accessToken);
                 },
-                onError: () => showError('Invalid credentials'),
+                onError: (error) => showError(error, 'Coś poszło nie tak!'),
             }
         );
     };
@@ -56,7 +56,7 @@ function LoginForm() {
             w={'xs'}
         >
             <TextInput<FormInput> isRequired={true} name="email" placeholder="Email" />
-            <TextInput<FormInput> name="password" placeholder="Hasło" type='password' />
+            <TextInput<FormInput> name="password" placeholder="Hasło" type="password" />
             <LoadingButton w={'full'} type="submit" isLoading={isPending}>
                 {t('Login')}
             </LoadingButton>

@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import auth from './auth';
 
 const apiUrl = import.meta.env.BASE_URL;
 
@@ -9,6 +10,7 @@ export default {
             baseURL: this.url,
             headers: {
                 ...options?.headers,
+                Authorization: `Bearer ${auth.getToken()}`,
             },
             ...options,
         });

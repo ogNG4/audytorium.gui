@@ -11,9 +11,9 @@ function Page() {
             </Box>
             <LoginForm />
             <Text>
-                Nie masz konta?{' '}
-                <ChakraLink as={ReactRouterLink} to="/create-account" color={'teal.500'}>
-                    {''} Utwórz konto
+                Zapomniałeś hasła?{' '}
+                <ChakraLink as={ReactRouterLink} to="/reset-password" color={'teal.500'}>
+                    {''} Przypomnij hasło.
                 </ChakraLink>
             </Text>
         </VStack>

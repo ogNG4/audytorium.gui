@@ -1,15 +1,13 @@
 import { Stack } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
 
-function BaseLayout() {
+function AdminLayout() {
     return (
         <Stack direction={'row'} w={'100%'}>
-            <Sidebar />
             <Stack flex={1}>
                 <Topbar />
-                <Stack p={6} height={'100%'} position={'relative'} ml={'270px'}>
+                <Stack p={6} height={'100%'} position={'relative'} alignItems={'center'}>
                     <Outlet />
                 </Stack>
             </Stack>
@@ -17,4 +15,4 @@ function BaseLayout() {
     );
 }
 
-export default BaseLayout;
+export default AdminLayout;

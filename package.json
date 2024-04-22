@@ -20,7 +20,9 @@
     "@hookform/resolvers": "^3.3.4",
     "@reduxjs/toolkit": "^2.2.1",
     "@tanstack/react-query": "^5.24.1",
+    "@tanstack/react-table": "^8.16.0",
     "axios": "^1.6.7",
+    "chakra-react-select": "^4.7.6",
     "framer-motion": "^11.0.6",
     "husky": "^9.0.11",
     "i18next": "^23.10.0",
@@ -43,6 +45,7 @@
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.20.1",
+    "@types/lodash": "^4.17.0",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
