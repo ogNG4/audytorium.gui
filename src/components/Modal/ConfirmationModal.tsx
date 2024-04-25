@@ -43,7 +43,7 @@ function ConfirmationModal({ onConfirm, title, description, isLoading, ...props 
                 <ModalFooter>
                     <Stack spacing={4} direction={'row'}>
                         <Button colorScheme={'gray'} variant="outlined" onClick={props.onClose}>
-                            Anuluj
+                            Anuluj kruwa
                         </Button>
                         <LoadingButton colorScheme={'red'} isLoading={isLoading} onClick={onConfirm}>
                             {props.confirmText || 'Potwierdź'}
