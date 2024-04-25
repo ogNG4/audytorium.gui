@@ -2,6 +2,7 @@ import { AppRoleName, Token, VerifyRolesOperator } from '@/types/auth';
 import auth from '@/utils/auth';
 import React from 'react';
 import { RouteObject, RouterProvider, createBrowserRouter, redirect } from 'react-router-dom';
+import RouteBoundary from '@/components/ErrorBoundary/RouteBoundary';
 
 async function loginLoader() {
     const token = auth.getDecodedToken();
@@ -18,7 +19,7 @@ async function protectedLoader() {
 async function rolesLoader(requiredRoles: AppRoleName[], operator?: VerifyRolesOperator) {
     const user = (await protectedLoader()) as Token;
     const hasAccess = auth.checkRoles({ roles: user.roles, requiredRoles, operator });
-    if (!hasAccess) return redirect('/');
+    if (!hasAccess) throw new Response('Forbidden', { status: 403 });
     return user;
 }
 
@@ -36,10 +37,12 @@ export const UsersPage = React.lazy(() => import('@/pages/AdminPanel/Users/Page'
 export const UserModal = React.lazy(() => import('@/pages/AdminPanel/Users/[Id]/Page'));
 
 const routeProps = {
+    errorElement: <RouteBoundary />,
     loader: protectedLoader,
 };
 
 const authRouteProps = {
+    errorElement: <RouteBoundary />,
     loader: loginLoader,
 };
 
@@ -66,18 +69,12 @@ const routeList: RouteObject[] = [
         id: 'admin',
         path: '/admin-panel',
         element: <AdminPanelLayout />,
+        ...routeProps,
         children: [
             {
                 path: 'users',
                 loader: () => rolesLoader([AppRoleName.SuperAdmin]),
                 element: <UsersPage />,
-                children: [
-                    // {
-                    //     path: ':userId',
-                    //     loader: () => rolesLoader([AppRoleName.SuperAdmin]),
-                    //     element: <UserModal />,
-                    // },
-                ],
             },
             {
                 path: 'users/:userId',
