@@ -3,6 +3,8 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Logo from '@/assets/logo.svg';
+import { RoleGuard } from '@/components/Access';
+import { AppRoleName } from '@/types/auth';
 
 function UserMenu() {
     const { t } = useTranslation();
@@ -38,9 +40,11 @@ function TopBar() {
                 </Box>
             </NavLink>
             <HStack>
-                <Link to="admin-panel/users">
-                    <Text>Użytkownicy</Text>
-                </Link>
+                <RoleGuard requiredRoles={[AppRoleName.Admin, AppRoleName.SuperAdmin]} operator="OR">
+                    <Link to="/admin-panel/users">
+                        <Text>Użytkownicy</Text>
+                    </Link>
+                </RoleGuard>
                 <UserMenu />
             </HStack>
         </HStack>
