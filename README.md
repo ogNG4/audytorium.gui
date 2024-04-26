@@ -1,3 +1,23 @@
+# Committing
+During the project's development, adhere to the following conventions for branch and commit names:
+
+Branch Names:
+- `feature/AP-[number]` - for new features
+- `bugfix/AP-[number]` - for bug fixes
+
+Example:
+- `feature/AP-27` 
+  
+Proper Commit Naming:
+- `feat(AP-[number]): message` - for new features
+- `fix(AP-[number]): message` - for bug fixes
+
+Example:
+- `feat(AP-27): add user management fucntionality`
+  
+Ensure each commit has a meaningful description that helps understand what changes have been made in the code.
+
+
 # Directory Structure
 
 - **.husky**: Contains hooks to ensure Git commits meet the linting & test criteria.
