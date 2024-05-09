@@ -2,9 +2,10 @@ import { memo } from 'react';
 import { Box, Menu, MenuButton, MenuItem, MenuList, Stack, VStack, Text, Button, MenuDivider } from '@chakra-ui/react';
 import { useRoomsQuery } from '@/hooks';
 import { filter, map } from 'lodash';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { cutString } from '../../utils/common';
+import Logo from '@/assets/logo.svg';
 
 function TopMenu() {
     const { data: rooms } = useRoomsQuery();
@@ -12,7 +13,7 @@ function TopMenu() {
     const selectedRoom = localStorage.getItem('selectedRoom');
 
     return (
-        <Box mt={14} w={'80%'}>
+        <Box w={'80%'}>
             <Menu>
                 <MenuButton
                     as={Button}
@@ -55,8 +56,21 @@ function TopMenu() {
 
 function Sidebar() {
     return (
-        <VStack height={'100vh'} bg={'gray.900'} w={'270px'} justifyContent={'space-between'} position={'fixed'} py={4}>
-            <Stack w={'100%'} alignItems={'center'}>
+        <VStack
+            height={'100vh'}
+            bg={'gray.900'}
+            w={'270px'}
+            justifyContent={'space-between'}
+            position={'fixed'}
+            py={4}
+            zIndex={9999}
+        >
+            <Stack w={'100%'} alignItems={'center'} spacing={4}>
+                <NavLink to="/">
+                    <Box>
+                        <img src={Logo} alt="Logo" width={180} />
+                    </Box>
+                </NavLink>
                 <TopMenu />
             </Stack>
             <Stack></Stack>
