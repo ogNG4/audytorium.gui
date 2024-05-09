@@ -7,6 +7,7 @@ import { map, sample } from 'lodash';
 import Message from './components/Message';
 import { fakeMessages } from './components/messages';
 import Logo from '@/assets/logo.svg';
+import { Outlet } from 'react-router-dom';
 
 interface FormInput {
     message: string;
@@ -36,29 +37,32 @@ function Page() {
     };
 
     return (
-        <Stack justifyContent="space-between" spacing={10} h={'80vh'} >
-            <VStack spacing={4} mb={8}>
-                <img src={Logo} alt="logo" width={280} />
+        <>
+            <Outlet />
+            <Stack justifyContent="space-between" spacing={10} h={'80vh'}>
+                <VStack spacing={4} mb={8}>
+                    <img src={Logo} alt="logo" width={280} />
 
-                {map(messages, (message: Message) => (
-                    <Message message={message.message} isBot={message.isBot} />
-                ))}
-            </VStack>
-            <SimpleForm<FormInput> onSubmit={handleSubmit}>
-                <Stack w="full" direction="row">
-                    <TextInput<FormInput>
-                        name="message"
-                        color="white"
-                        placeholder="Wprowadź wiadomość !"
-                        isReadOnly={isBotTyping}
-                        mb={4}
-                    />
-                    <Button type="submit" isDisabled={isBotTyping}>
-                        <ArrowForwardIcon />
-                    </Button>
-                </Stack>
-            </SimpleForm>
-        </Stack>
+                    {map(messages, (message: Message) => (
+                        <Message message={message.message} isBot={message.isBot} />
+                    ))}
+                </VStack>
+                <SimpleForm<FormInput> onSubmit={handleSubmit}>
+                    <Stack w="full" direction="row">
+                        <TextInput<FormInput>
+                            name="message"
+                            color="white"
+                            placeholder="Wprowadź wiadomość !"
+                            isReadOnly={isBotTyping}
+                            mb={4}
+                        />
+                        <Button type="submit" isDisabled={isBotTyping}>
+                            <ArrowForwardIcon />
+                        </Button>
+                    </Stack>
+                </SimpleForm>
+            </Stack>
+        </>
     );
 }
 

@@ -3,93 +3,120 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
-  "/user": {
-    put: operations["UserController_updateUser"];
-    post: operations["UserController_createUser"];
-  };
-  "/user/{id}": {
-    get: operations["UserController_getUserById"];
-    delete: operations["UserController_deleteUser"];
-  };
-  "/user/all": {
-    get: operations["UserController_getAllUsers"];
-  };
-  "/auth/sign-in": {
-    post: operations["AuthController_signIn"];
-  };
-  "/auth/set-new-password": {
-    post: operations["AuthController_setNewPassword"];
-  };
-  "/auth/reset-password": {
-    post: operations["AuthController_resetPassword"];
-  };
-  "/roles/all": {
-    get: operations["RoleController_getAllUsers"];
-  };
+    '/user': {
+        put: operations['UserController_updateUser'];
+        post: operations['UserController_createUser'];
+    };
+    '/user/{id}': {
+        get: operations['UserController_getUserById'];
+        delete: operations['UserController_deleteUser'];
+    };
+    '/user/all': {
+        get: operations['UserController_getAllUsers'];
+    };
+    '/auth/sign-in': {
+        post: operations['AuthController_signIn'];
+    };
+    '/auth/set-new-password': {
+        post: operations['AuthController_setNewPassword'];
+    };
+    '/auth/reset-password': {
+        post: operations['AuthController_resetPassword'];
+    };
+    '/roles/all': {
+        get: operations['RoleController_getAllUsers'];
+    };
+    '/room': {
+        put: operations['RoomController_updateRoom'];
+        post: operations['RoomController_createRoom'];
+    };
+    '/room/{id}': {
+        get: operations['RoomController_getRoomById'];
+        delete: operations['RoomController_deleteRoom'];
+    };
+    '/room/all': {
+        get: operations['RoomController_getAllRooms'];
+    };
 }
 
 export type webhooks = Record<string, never>;
 
 export interface components {
-  schemas: {
-    CreateAccountInputDto: {
-      /** @example user@email.com */
-      email: string;
-      /** @example John */
-      firstName: string;
-      /** @example Doe */
-      lastName: string;
-      /** @example ADMIN */
-      role: string;
+    schemas: {
+        CreateAccountInputDto: {
+            /** @example user@email.com */
+            email: string;
+            /** @example John */
+            firstName: string;
+            /** @example Doe */
+            lastName: string;
+            /** @example ADMIN */
+            role: string;
+        };
+        UpdateAccountInputDto: {
+            /** @example 123456 */
+            id: string;
+            /** @example user@email.com */
+            email: string;
+            /** @example John */
+            firstName: string;
+            /** @example Doe */
+            lastName: string;
+            /** @example ADMIN */
+            role: string;
+        };
+        UserDto: {
+            id: string;
+            email: string;
+            firstName: string;
+            lastName: string;
+            roles: string[];
+            /** Format: date-time */
+            createdAt: string;
+            isActive: boolean;
+        };
+        SigInputDto: {
+            email: string;
+            password: string;
+        };
+        SignInDto: {
+            accessToken: string;
+        };
+        SetNewPasswordInputDto: {
+            userId: string;
+            token: string;
+            password: string;
+        };
+        ResetPasswordInputDto: {
+            email: string;
+        };
+        RoleDto: {
+            name: string;
+        };
+        CreateRoomInputDto: {
+            /** @example magazyn */
+            name: string;
+        };
+        UpdateRoomInputDto: {
+            /** @example 123456 */
+            id: string;
+            /** @example magazyn */
+            name: string;
+        };
+        RoomDto: {
+            /** @example 123456 */
+            id: string;
+            name: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
     };
-    UpdateAccountInputDto: {
-      /** @example 123456 */
-      id: string;
-      /** @example user@email.com */
-      email: string;
-      /** @example John */
-      firstName: string;
-      /** @example Doe */
-      lastName: string;
-      /** @example ADMIN */
-      role: string;
-    };
-    UserDto: {
-      id: string;
-      email: string;
-      firstName: string;
-      lastName: string;
-      roles: string[];
-      /** Format: date-time */
-      createdAt: string;
-      isActive: boolean;
-    };
-    SigInputDto: {
-      email: string;
-      password: string;
-    };
-    SignInDto: {
-      accessToken: string;
-    };
-    SetNewPasswordInputDto: {
-      userId: string;
-      token: string;
-      password: string;
-    };
-    ResetPasswordInputDto: {
-      email: string;
-    };
-    RoleDto: {
-      name: string;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 
 export type $defs = Record<string, never>;
@@ -97,120 +124,183 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
-
-  UserController_updateUser: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateAccountInputDto"];
-      };
-    };
-    responses: {
-      /** @description Update user */
-      200: {
-        content: never;
-      };
-    };
-  };
-  UserController_createUser: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateAccountInputDto"];
-      };
-    };
-    responses: {
-      /** @description Create user */
-      201: {
-        content: never;
-      };
-    };
-  };
-  UserController_getUserById: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description Get user by id */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UserDto"];
+    UserController_updateUser: {
+        requestBody: {
+            content: {
+                'application/json': components['schemas']['UpdateAccountInputDto'];
+            };
         };
-      };
-    };
-  };
-  UserController_deleteUser: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description Delete user */
-      200: {
-        content: never;
-      };
-    };
-  };
-  UserController_getAllUsers: {
-    responses: {
-      /** @description Get all users */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UserDto"][];
+        responses: {
+            /** @description Update user */
+            200: {
+                content: never;
+            };
         };
-      };
     };
-  };
-  AuthController_signIn: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SigInputDto"];
-      };
-    };
-    responses: {
-      /** @description Sign in */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SignInDto"];
+    UserController_createUser: {
+        requestBody: {
+            content: {
+                'application/json': components['schemas']['CreateAccountInputDto'];
+            };
         };
-      };
-    };
-  };
-  AuthController_setNewPassword: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SetNewPasswordInputDto"];
-      };
-    };
-    responses: {
-      /** @description Set new password */
-      200: {
-        content: never;
-      };
-    };
-  };
-  AuthController_resetPassword: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ResetPasswordInputDto"];
-      };
-    };
-    responses: {
-      /** @description Reset password */
-      200: {
-        content: never;
-      };
-    };
-  };
-  RoleController_getAllUsers: {
-    responses: {
-      /** @description Get all users */
-      200: {
-        content: {
-          "application/json": components["schemas"]["RoleDto"][];
+        responses: {
+            /** @description Create user */
+            201: {
+                content: never;
+            };
         };
-      };
     };
-  };
+    UserController_getUserById: {
+        parameters: {
+            path: {
+                id: string;
+            };
+        };
+        responses: {
+            /** @description Get user by id */
+            200: {
+                content: {
+                    'application/json': components['schemas']['UserDto'];
+                };
+            };
+        };
+    };
+    UserController_deleteUser: {
+        parameters: {
+            path: {
+                id: string;
+            };
+        };
+        responses: {
+            /** @description Delete user */
+            200: {
+                content: never;
+            };
+        };
+    };
+    UserController_getAllUsers: {
+        responses: {
+            /** @description Get all users */
+            200: {
+                content: {
+                    'application/json': components['schemas']['UserDto'][];
+                };
+            };
+        };
+    };
+    AuthController_signIn: {
+        requestBody: {
+            content: {
+                'application/json': components['schemas']['SigInputDto'];
+            };
+        };
+        responses: {
+            /** @description Sign in */
+            200: {
+                content: {
+                    'application/json': components['schemas']['SignInDto'];
+                };
+            };
+        };
+    };
+    AuthController_setNewPassword: {
+        requestBody: {
+            content: {
+                'application/json': components['schemas']['SetNewPasswordInputDto'];
+            };
+        };
+        responses: {
+            /** @description Set new password */
+            200: {
+                content: never;
+            };
+        };
+    };
+    AuthController_resetPassword: {
+        requestBody: {
+            content: {
+                'application/json': components['schemas']['ResetPasswordInputDto'];
+            };
+        };
+        responses: {
+            /** @description Reset password */
+            200: {
+                content: never;
+            };
+        };
+    };
+    RoleController_getAllUsers: {
+        responses: {
+            /** @description Get all users */
+            200: {
+                content: {
+                    'application/json': components['schemas']['RoleDto'][];
+                };
+            };
+        };
+    };
+    RoomController_updateRoom: {
+        requestBody: {
+            content: {
+                'application/json': components['schemas']['UpdateRoomInputDto'];
+            };
+        };
+        responses: {
+            /** @description Update room */
+            200: {
+                content: never;
+            };
+        };
+    };
+    RoomController_createRoom: {
+        requestBody: {
+            content: {
+                'application/json': components['schemas']['CreateRoomInputDto'];
+            };
+        };
+        responses: {
+            /** @description Create room */
+            201: {
+                content: never;
+            };
+        };
+    };
+    RoomController_getRoomById: {
+        parameters: {
+            path: {
+                id: string;
+            };
+        };
+        responses: {
+            /** @description Get room by id */
+            200: {
+                content: {
+                    'application/json': components['schemas']['RoomDto'];
+                };
+            };
+        };
+    };
+    RoomController_deleteRoom: {
+        parameters: {
+            path: {
+                id: string;
+            };
+        };
+        responses: {
+            /** @description Delete room */
+            200: {
+                content: never;
+            };
+        };
+    };
+    RoomController_getAllRooms: {
+        responses: {
+            /** @description Get all rooms */
+            200: {
+                content: {
+                    'application/json': components['schemas']['RoomDto'][];
+                };
+            };
+        };
+    };
 }
