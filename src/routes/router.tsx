@@ -95,17 +95,17 @@ const routeList: RouteObject[] = [
         children: [
             {
                 path: 'users',
-                loader: () => rolesLoader([AppRoleName.SuperAdmin]),
+                loader: () => rolesLoader([AppRoleName.SuperAdmin, AppRoleName.Admin]),
                 element: <UsersPage />,
             },
             {
                 path: 'users/:userId',
-                loader: () => rolesLoader([AppRoleName.SuperAdmin]),
+                loader: () => rolesLoader([AppRoleName.SuperAdmin, AppRoleName.Admin]),
                 element: <UserModal />,
             },
             {
                 path: 'rooms',
-                loader: () => rolesLoader([AppRoleName.SuperAdmin]),
+                loader: () => rolesLoader([AppRoleName.SuperAdmin, AppRoleName.Admin]),
                 element: <RoomsModal />,
             },
         ],

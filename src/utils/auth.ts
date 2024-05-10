@@ -19,7 +19,7 @@ export default {
         }
     },
 
-    checkRoles({ roles, requiredRoles, operator = 'AND' }: RolesAccessProps) {
+    checkRoles({ roles, requiredRoles, operator = 'OR' }: RolesAccessProps) {
         if (operator === 'OR') return requiredRoles.some((role) => roles.includes(role));
         return requiredRoles.every((role) => roles.includes(role));
     },
