@@ -3,6 +3,7 @@ import auth from '@/utils/auth';
 import React from 'react';
 import { RouteObject, RouterProvider, createBrowserRouter, redirect } from 'react-router-dom';
 import RouteBoundary from '@/components/ErrorBoundary/RouteBoundary';
+import { getRooms } from '@/hooks/queries/useRoomsQuery';
 
 async function loginLoader() {
     const token = auth.getDecodedToken();
@@ -35,6 +36,7 @@ export const ResetPasswordPage = React.lazy(() => import('@/pages/(Auth)/ResetPa
 export const ChatbotPage = React.lazy(() => import('@/pages/Chatbot/Page'));
 export const UsersPage = React.lazy(() => import('@/pages/AdminPanel/Users/Page'));
 export const UserModal = React.lazy(() => import('@/pages/AdminPanel/Users/[Id]/Page'));
+export const RoomsModal = React.lazy(() => import('@/pages/AdminPanel/Room/Page'));
 
 const routeProps = {
     errorElement: <RouteBoundary />,
@@ -53,7 +55,27 @@ const routeList: RouteObject[] = [
         ...routeProps,
         element: <BaseLayout />,
 
-        children: [{ ...routeProps, path: '/', element: <ChatbotPage /> }],
+        children: [
+            {
+                ...routeProps,
+                path: '/',
+                loader: async () => {
+                    try {
+                        const rooms = await getRooms();
+                        localStorage.setItem('selectedRoom', rooms[0].id);
+                        return redirect(`/${rooms[0].id}`);
+                    } catch (error) {
+                        console.error('Błąd podczas pobierania pokoi:', error);
+                        return null;
+                    }
+                },
+            },
+            {
+                ...routeProps,
+                path: '/:roomId',
+                element: <ChatbotPage />,
+            },
+        ],
     },
     {
         id: 'auth',
@@ -80,6 +102,11 @@ const routeList: RouteObject[] = [
                 path: 'users/:userId',
                 loader: () => rolesLoader([AppRoleName.SuperAdmin]),
                 element: <UserModal />,
+            },
+            {
+                path: 'rooms',
+                loader: () => rolesLoader([AppRoleName.SuperAdmin]),
+                element: <RoomsModal />,
             },
         ],
     },
