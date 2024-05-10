@@ -6,6 +6,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { cutString } from '../../utils/common';
 import Logo from '@/assets/logo.svg';
+import { RoleGuard } from '@/components/Access';
+import { AppRoleName } from '@/types/auth';
 
 function TopMenu() {
     const { data: rooms } = useRoomsQuery();
@@ -44,10 +46,12 @@ function TopMenu() {
                             <Text>{cutString(room.name, 30)}</Text>
                         </MenuItem>
                     ))}
-                    <MenuDivider />
-                    <MenuItem bg={'gray.700'} onClick={() => navigate('/admin-panel/rooms')}>
-                        Zarządzaj Pokojami <ChevronDownIcon ml={2} />
-                    </MenuItem>
+                    <RoleGuard requiredRoles={[AppRoleName.Admin, AppRoleName.SuperAdmin]}>
+                        <MenuDivider />
+                        <MenuItem bg={'gray.700'} onClick={() => navigate('/admin-panel/rooms')}>
+                            Zarządzaj Pokojami <ChevronDownIcon ml={2} />
+                        </MenuItem>
+                    </RoleGuard>
                 </MenuList>
             </Menu>
         </Box>
