@@ -10,11 +10,10 @@ import {
     ModalOverlay,
     Stack,
     Text,
-    Input,
     HStack,
     IconButton,
 } from '@chakra-ui/react';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Else, If, Then, When } from 'react-if';
 import { useNavigate } from 'react-router-dom';
 import { map } from 'lodash';
@@ -23,20 +22,35 @@ import queryKeys from '@/constants/queryKeys';
 import DialogSpinner from '@/components/Spinner/DialogSpinner';
 import RoomItem from './components/RoomItem';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import { FormProvider, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import TextInput from '@/components/Form/TextInput';
+
+interface FormInput {
+    name: string;
+}
 
 function Page() {
     const navigate = useNavigate();
 
     const { data: rooms, isLoading: isRoomsLoading } = useRoomsQuery();
-    const [isNewRoom, setIsNewRoom] = useState(false);
-    const [roomName, setRoomName] = useState('');
     const [editedRoomId, setEditedRoomId] = useState('');
-
     const { mutate: createMutate } = useCreateRoomMutation();
     const { mutate: updateMutate } = useUpdateRoomMutation();
     const { mutate: deleteMutate } = useDeleteRoomMutation();
     const { showSuccess, showError } = useToast();
     const client = useQueryClient();
+    const validationSchema = useMemo(() => {
+        return yup.object().shape({
+            name: yup.string().required('Nazwa pokoju jest wymagana').max(60, 'Nazwa pokoju jest za długa'),
+        });
+    }, []);
+
+    const methods = useForm<FormInput>({
+        resolver: yupResolver(validationSchema),
+    });
+    const { handleSubmit, reset } = methods;
 
     const handleClose = useCallback(() => {
         navigate('/');
@@ -61,13 +75,14 @@ function Page() {
         [updateMutate, client, showSuccess, showError]
     );
 
-    const handleCreate = useCallback(
-        (name: string) => {
+    const handleCreate = useCallback(() => {
+        handleSubmit((data) => {
             createMutate(
-                { name },
+                { ...data },
                 {
                     onSuccess: () => {
                         client.invalidateQueries({ queryKey: [queryKeys.rooms] });
+                        setEditedRoomId('');
                         showSuccess('Pokój został utworzony pomyślnie!');
                     },
                     onError: (error) => {
@@ -75,9 +90,8 @@ function Page() {
                     },
                 }
             );
-        },
-        [createMutate, client, showSuccess, showError]
-    );
+        })();
+    }, [handleSubmit, createMutate, client, showSuccess, showError]);
 
     const handleDelete = useCallback(
         (id: string) => {
@@ -127,46 +141,49 @@ function Page() {
                 </ModalBody>
 
                 <ModalFooter mt={4}>
-                    <If condition={isNewRoom}>
-                        <Then>
-                            <HStack w={'100%'}>
-                                <Input size="sm" onChange={(e) => setRoomName(e.target.value)} />
-                                <IconButton
-                                    variant="outline"
-                                    colorScheme="green"
-                                    size={'sm'}
-                                    aria-label="Edit"
-                                    icon={<CheckIcon />}
-                                    onClick={() => {
-                                        handleCreate(roomName);
-                                        setIsNewRoom(false);
-                                    }}
-                                />
-                                <IconButton
-                                    variant="outline"
-                                    colorScheme="red"
-                                    size={'sm'}
-                                    aria-label="Edit"
-                                    icon={<CloseIcon />}
-                                    onClick={() => setIsNewRoom(false)}
-                                />
-                            </HStack>
-                        </Then>
-                        <Else>
-                            <When condition={rooms ? rooms.length <= 10 : false}>
-                                <Button
-                                    size={'sm'}
-                                    onClick={() => {
-                                        setEditedRoomId('');
-                                        setIsNewRoom(true);
-                                    }}
-                                    colorScheme="blue"
-                                >
-                                    Utwórz Pokój
-                                </Button>
-                            </When>
-                        </Else>
-                    </If>
+                    <FormProvider {...methods}>
+                        <If condition={editedRoomId === 'create-room'}>
+                            <Then>
+                                <HStack w={'100%'} alignItems={'start'}>
+                                    <TextInput name="name" size="sm" defaultValue={''} />
+                                    <IconButton
+                                        variant="outline"
+                                        colorScheme="green"
+                                        size={'sm'}
+                                        aria-label="Edit"
+                                        icon={<CheckIcon />}
+                                        onClick={() => {
+                                            handleCreate();
+                                        }}
+                                    />
+                                    <IconButton
+                                        variant="outline"
+                                        colorScheme="red"
+                                        size={'sm'}
+                                        aria-label="Edit"
+                                        icon={<CloseIcon />}
+                                        onClick={() => {
+                                            reset({ name: '' });
+                                            setEditedRoomId('');
+                                        }}
+                                    />
+                                </HStack>
+                            </Then>
+                            <Else>
+                                <When condition={rooms ? rooms.length <= 10 : false}>
+                                    <Button
+                                        size={'sm'}
+                                        onClick={() => {
+                                            setEditedRoomId('create-room');
+                                        }}
+                                        colorScheme="blue"
+                                    >
+                                        Utwórz Pokój
+                                    </Button>
+                                </When>
+                            </Else>
+                        </If>
+                    </FormProvider>
                 </ModalFooter>
             </ModalContent>
         </Modal>

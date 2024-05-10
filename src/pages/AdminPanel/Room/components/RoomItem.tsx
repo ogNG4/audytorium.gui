@@ -1,8 +1,8 @@
 import { EditIcon, DeleteIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { HStack, IconButton, Input, Text, Tooltip } from '@chakra-ui/react';
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 import { Else, If, Then, When } from 'react-if';
-import { cutString } from '../../../../utils/common';
+import { cutString } from '@/utils/common';
 
 interface RoomItemProps {
     id: string;
@@ -14,18 +14,13 @@ interface RoomItemProps {
     setEditedRoomId: (id: string) => void;
 }
 function RoomItem({ id, name, onUpdate, onDelete, isDeletable, editedRoomId, setEditedRoomId }: RoomItemProps) {
-    const [isEdited, setIsEdited] = useState(false);
     const [roomName, setRoomName] = useState(name);
-
-    useEffect(() => {
-        setIsEdited(id === editedRoomId);
-    }, [id, editedRoomId]);
 
     return (
         <HStack justifyContent={'space-between'}>
-            <If condition={isEdited}>
+            <If condition={editedRoomId === id}>
                 <Then>
-                    <Input defaultValue={name} size="sm" onChange={(e) => setRoomName(e.target.value)} />
+                    <Input defaultValue={name} maxLength={60} size="sm" onChange={(e) => setRoomName(e.target.value)} />
                 </Then>
                 <Else>
                     <Tooltip label={name} aria-label="A tooltip">
@@ -34,7 +29,7 @@ function RoomItem({ id, name, onUpdate, onDelete, isDeletable, editedRoomId, set
                 </Else>
             </If>
             <HStack spacing={2}>
-                <If condition={isEdited}>
+                <If condition={editedRoomId === id}>
                     <Then>
                         <IconButton
                             variant="outline"
@@ -50,7 +45,7 @@ function RoomItem({ id, name, onUpdate, onDelete, isDeletable, editedRoomId, set
                             size={'sm'}
                             aria-label="Edit"
                             icon={<CloseIcon />}
-                            onClick={() => setIsEdited(false)}
+                            onClick={() => setEditedRoomId('')}
                         />
                     </Then>
                     <Else>
