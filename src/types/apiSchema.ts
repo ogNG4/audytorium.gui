@@ -38,6 +38,18 @@ export interface paths {
     '/room/all': {
         get: operations['RoomController_getAllRooms'];
     };
+    '/chatbot/start-conversation': {
+        post: operations['ChatbotController_startConversation'];
+    };
+    '/chatbot/send-message': {
+        post: operations['ChatbotController_sendMessage'];
+    };
+    '/chatbot/conversation/all/{roomId}': {
+        get: operations['ChatbotController_getAllConversations'];
+    };
+    '/chatbot/conversation/{id}': {
+        get: operations['ChatbotController_getConversation'];
+    };
 }
 
 export type webhooks = Record<string, never>;
@@ -110,6 +122,33 @@ export interface components {
             name: string;
             /** Format: date-time */
             createdAt: string;
+        };
+        StartConversationInputDto: {
+            roomId: string;
+        };
+        ConversationIdDto: {
+            id: string;
+        };
+        SendMessageInputDto: {
+            message: string;
+            conversationId?: string;
+            roomId: string;
+        };
+        MessageDto: {
+            id: string;
+            isBot: boolean;
+            content: string;
+            /** Format: date-time */
+            createdAt: string;
+            conversationId: string;
+        };
+        ConversationDto: {
+            id: string;
+            roomId: string;
+            userId: string;
+            /** Format: date-time */
+            createdAt: string;
+            messages: components['schemas']['MessageDto'][];
         };
     };
     responses: never;
@@ -299,6 +338,64 @@ export interface operations {
             200: {
                 content: {
                     'application/json': components['schemas']['RoomDto'][];
+                };
+            };
+        };
+    };
+    ChatbotController_startConversation: {
+        requestBody: {
+            content: {
+                'application/json': components['schemas']['StartConversationInputDto'];
+            };
+        };
+        responses: {
+            /** @description Send message */
+            200: {
+                content: {
+                    'application/json': components['schemas']['ConversationIdDto'];
+                };
+            };
+        };
+    };
+    ChatbotController_sendMessage: {
+        requestBody: {
+            content: {
+                'application/json': components['schemas']['SendMessageInputDto'];
+            };
+        };
+        responses: {
+            /** @description Send message */
+            200: {
+                content: never;
+            };
+        };
+    };
+    ChatbotController_getAllConversations: {
+        parameters: {
+            path: {
+                roomId: string;
+            };
+        };
+        responses: {
+            /** @description Get all conversations */
+            200: {
+                content: {
+                    'application/json': components['schemas']['ConversationDto'][];
+                };
+            };
+        };
+    };
+    ChatbotController_getConversation: {
+        parameters: {
+            path: {
+                id: string;
+            };
+        };
+        responses: {
+            /** @description Get conversation */
+            200: {
+                content: {
+                    'application/json': components['schemas']['ConversationDto'];
                 };
             };
         };
