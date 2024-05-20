@@ -4,6 +4,7 @@ import React from 'react';
 import { RouteObject, RouterProvider, createBrowserRouter, redirect } from 'react-router-dom';
 import RouteBoundary from '@/components/ErrorBoundary/RouteBoundary';
 import { getRooms } from '@/hooks/queries/useRoomsQuery';
+import { isNewParam } from '@/constants/common';
 
 async function loginLoader() {
     const token = auth.getDecodedToken();
@@ -63,7 +64,7 @@ const routeList: RouteObject[] = [
                     try {
                         const rooms = await getRooms();
                         localStorage.setItem('selectedRoom', rooms[0].id);
-                        return redirect(`/${rooms[0].id}`);
+                        return redirect(`/${rooms[0].id}/${isNewParam}`);
                     } catch (error) {
                         console.error('Błąd podczas pobierania pokoi:', error);
                         return null;
@@ -72,7 +73,7 @@ const routeList: RouteObject[] = [
             },
             {
                 ...routeProps,
-                path: '/:roomId',
+                path: '/:roomId/:conversationId',
                 element: <ChatbotPage />,
             },
         ],
