@@ -1,12 +1,13 @@
-import { useToast as useChakraToast } from '@chakra-ui/react';
+import { UseToastOptions, useToast as useChakraToast } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
 import { useMemo } from 'react';
 import { get } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-const toastConfig = {
+const toastConfig: UseToastOptions = {
     duration: 5000,
     isClosable: true,
+    position: 'top',
 };
 
 function useToast() {

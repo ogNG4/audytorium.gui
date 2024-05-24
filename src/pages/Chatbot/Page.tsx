@@ -10,7 +10,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { isNewParam } from '@/constants/common';
-import { useConversationQuery, useSentMessageMutation, useStartConversationMutation } from '@/hooks';
+import { useConversationQuery, useSentMessageMutation, useStartConversationMutation, useToast } from '@/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import queryKeys from '@/constants/queryKeys';
 import { Case, Default, Switch, When } from 'react-if';
@@ -45,6 +45,7 @@ function Page() {
     const { mutate: sendMessageMutate, isPending: isSendPending } = useSentMessageMutation();
     const { mutate: startConversationMutate } = useStartConversationMutation();
     const isSameUser = conversation?.userId === user.id;
+    const { showError } = useToast();
 
     const validationSchema = useMemo(() => {
         return yup.object().shape({
@@ -74,6 +75,10 @@ function Page() {
                     onSuccess: () => {
                         client.invalidateQueries({ queryKey: [queryKeys.conversation, conversationId] });
                     },
+
+                    onError: (error) => {
+                        showError(error, 'Coś poszło nie tak');
+                    },
                 }
             );
 
@@ -81,7 +86,7 @@ function Page() {
                 message: '',
             });
         })();
-    }, [handleSubmit, reset, client, conversationId, roomId, sendMessageMutate]);
+    }, [handleSubmit, reset, client, conversationId, roomId, sendMessageMutate, showError]);
 
     const handleStartConversation = useCallback(() => {
         startConversationMutate(
